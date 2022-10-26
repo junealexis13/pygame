@@ -48,7 +48,7 @@ player_surf = pygame.image.load('graphics/Player/player_walk_1.png').convert_alp
 player_rect = player_surf.get_rect(midbottom= (100,280))                             #this creates a rectangle based on sprite dimension  
 #the get_rect acts like an ANCHORPOINT
 #can be substttd with top-mid-bottom + left-right
-player_gravity = -20 
+player_gravity = 0 
 while True:                                                                         #The window will run indefinitely
     #Check all the EVENTS/ Looping all through events
 
@@ -71,16 +71,16 @@ while True:                                                                     
 
 
         #Execute if MOUSE was pressed
-        if event.type == pygame.MOUSEBUTTONDOWN:  
-            if player_rect.bottom == 300:    
-                player_gravity = -20
+        # if event.type == pygame.MOUSEBUTTONDOWN:  
+        #     if player_rect.bottom == 300:    
+        #         player_gravity = -20
 
             #ENABLE Flapping
             # elif player_rect.bottom <= 300:                       
             #     player_gravity = -13
 
-        if event.type == pygame.MOUSEMOTION:
-            print(pygame.mouse.get_pos())
+        # if event.type == pygame.MOUSEMOTION:
+        #     print(pygame.mouse.get_pos())
 
         #Execute if a KEY was released
         # if event.type == pygame.KEYUP:
