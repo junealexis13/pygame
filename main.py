@@ -26,7 +26,7 @@ class Player(pygame.sprite.Sprite):
         self.player_jump = pygame.image.load('graphics/Player/jump.png').convert_alpha()
         self.player_index = 0
         self.image = pygame.image.load('graphics/Player/player_walk_1.png').convert_alpha()
-        self.rect = self.image.get_rect(midbottom=(200,300))
+        self.rect = self.image.get_rect(midbottom=(100,300))
 
         self.gravity = 0
 
@@ -47,18 +47,46 @@ class Player(pygame.sprite.Sprite):
         if self.rect.bottom < 300:
             self.image = self.player_jump
         elif self.rect.bottom >= 300:
-            self.player_index += 0.15
-            ind = 0
+            self.player_index += 0.15 
             if self.player_index > len(self.player_animation):
                 self.player_index = 0
             self.image = self.player_animation[int(self.player_index)]
-
 
     def update(self):
         self.animate()
         self.player_input()
         self.apply_gravity()
 
+class Obstacle(pygame.sprite.Sprite):
+    def __init__(self, types):
+        super().__init__()
+
+        if types == 'fly':
+            fly_animation1 = pygame.image.load('graphics/Fly/Fly1.png').convert_alpha()
+            fly_animation2 = pygame.image.load('graphic/Fly/Fly2.png').convert_alpha()
+            self.animation = [fly_animation1,fly_animation2]
+            y_pos = 200
+
+        elif types == 'snail':
+            snail_animation1 = pygame.image.load('graphics/snail/snail1.png').convert_alpha()
+            snail_animation2 = pygame.image.load('graphics/snail/snail2.png').convert_alpha()
+            self.animation = [snail_animation1,snail_animation2]
+            y_pos = 300
+
+        #setting default frames
+        self.obstacle_index = 0
+        self.image = self.animation[self.obstacle_index]
+        self.rect = self.image.get_rect(midbottom = (randint(900,1100), y_pos))
+
+    def animate(self):
+        self.obstacle_index += 0.1
+        if self.obstacle_index >= len(self.animation):
+            self.obstacle_index = 0
+        self.image = self.animation[self.obstacle_index]
+
+    def update(self):
+        self.animate() 
+    
 
 ####Setting up the screen
 width = 800
