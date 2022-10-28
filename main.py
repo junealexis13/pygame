@@ -63,7 +63,7 @@ class Obstacle(pygame.sprite.Sprite):
 
         if types == 'fly':
             fly_animation1 = pygame.image.load('graphics/Fly/Fly1.png').convert_alpha()
-            fly_animation2 = pygame.image.load('graphic/Fly/Fly2.png').convert_alpha()
+            fly_animation2 = pygame.image.load('graphics/Fly/Fly2.png').convert_alpha()
             self.animation = [fly_animation1,fly_animation2]
             y_pos = 200
 
@@ -76,16 +76,17 @@ class Obstacle(pygame.sprite.Sprite):
         #setting default frames
         self.obstacle_index = 0
         self.image = self.animation[self.obstacle_index]
-        self.rect = self.image.get_rect(midbottom = (randint(900,1100), y_pos))
+        self.rect = self.image.get_rect(midbottom = (randint(1000,1100), y_pos))
 
     def animate(self):
         self.obstacle_index += 0.1
         if self.obstacle_index >= len(self.animation):
             self.obstacle_index = 0
-        self.image = self.animation[self.obstacle_index]
+        self.image = self.animation[int(self.obstacle_index)]
 
     def update(self):
         self.animate() 
+        self.rect.x -= 5
     
 
 ####Setting up the screen
@@ -141,8 +142,13 @@ snail_rectangle = snail_surf.get_rect(midbottom = (snail_xpos, height - 100))
 player_walk1 = pygame.image.load('graphics/Player/player_walk_1.png').convert_alpha()
 player_walk2 = pygame.image.load('graphics/Player/player_walk_2.png').convert_alpha()
 
+
+
+#SPRITE GROUUPS
 player = pygame.sprite.GroupSingle()
 player.add(Player())
+
+obstacle_group = pygame.sprite.Group()
 
 
 #animation
@@ -166,7 +172,7 @@ player_stand_rect = player_stand.get_rect(center = (height/2, width/2))
 
 #Timer
 obstacle_timer = pygame.USEREVENT + 1
-pygame.time.set_timer(obstacle_timer, 900)
+pygame.time.set_timer(obstacle_timer, 1000)
 
 while True:                                                                         #The window will run indefinitely
     #Check all the EVENTS/ Looping all through events
@@ -181,6 +187,8 @@ while True:                                                                     
 
         if game_active:
             #Execute if a KEY was pressed
+            if event.type == obstacle_timer:
+                obstacle_group.add(Obstacle('fly'))
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     if player_rect.bottom == 300:    
@@ -194,10 +202,6 @@ while True:                                                                     
                 game_active = True
                 snail_rectangle.left = 800
                 start_time = int(pygame.time.get_ticks() / 1000)
-
-        # if event.type == obstacle_timer and game_active:
-        #     print('Test this uevent')
-
 
             #Execute if MOUSE was pressed
             # if event.type == pygame.MOUSEBUTTONDOWN:  
@@ -228,6 +232,7 @@ while True:                                                                     
 
     #CONTROLS EVERYTHING ON SCREEN
     if game_active:
+        
         # screen.blit(test_surface, (0,0))                                               #showing surface
         screen.blit(sky_surf, (0,0))                                                    #showing sky surface        the tuple goes like (X,Y)
         screen.blit(ground_surf, (0,300))                                            #showing ground surface
@@ -239,7 +244,11 @@ while True:                                                                     
         #animating snail
 
         player.draw(screen)
+        obstacle_group.draw(screen)
         player.update()
+        obstacle_group.update()
+
+        #Adding some fancy logo LOL
         screen.blit(logoSurf,logoRect)
 
         display_score()
@@ -253,10 +262,10 @@ while True:                                                                     
         player_gravity += 1
         player_rect.y += player_gravity
 
-        #Setting a non-collision based floor
-        if player_rect.bottom >= 300:
-            player_rect.bottom = 300
-        screen.blit(player_surf, player_rect)
+        # #Setting a non-collision based floor
+        # if player_rect.bottom >= 300:
+        #     player_rect.bottom = 300
+        # screen.blit(player_surf, player_rect)
 
 
 
